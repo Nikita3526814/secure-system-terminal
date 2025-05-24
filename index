@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure System</title>
+    <style>
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .terminal {
+            border: 2px solid #00ff00;
+            padding: 20px;
+            width: 80%;
+            max-width: 600px;
+            background: #000;
+            box-shadow: 0 0 10px #00ff00;
+            overflow: hidden;
+        }
+        .text {
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: #ff0000;
+        }
+        .blink {
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+        .input-line {
+            display: inline;
+        }
+        .hidden {
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal" id="terminal">
+        <div class="text" id="output">
+            > Booting SECURE SYSTEM v7.9.1...<br>
+            > Initializing ENCRYPTION PROTOCOL AES-512... [OK]<br>
+            > Connecting to MAINFRAME-SECURE-01...<br>
+            > FIREWALL DETECTED: Level 5 Quantum Encryption<br>
+            > Attempting bypass...<br>
+        </div>
+    </div>
+
+    <script>
+        const terminal = document.getElementById('terminal');
+        const output = document.getElementById('output');
+        const correctLogin = 'LeaderSDA_Ru02';
+        const correctPassword = 'SDAhudowekfla382_Ru9392';
+        let stage = 0;
+
+        function typeText(text, callback) {
+            output.innerHTML += text.replace(/\n/g, '<br>');
+            if (callback) setTimeout(callback, 500);
+        }
+
+        function showInput(prompt) {
+            output.innerHTML += prompt + '<span class="blink">█</span><br>';
+            const input = document.createElement('input');
+            input.className = 'input-line';
+            input.type = 'text';
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleInput(input.value);
+                    terminal.removeChild(input);
+                }
+            });
+            terminal.appendChild(input);
+            input.focus();
+        }
+
+        function handleInput(value) {
+            if (stage === 0) {
+                if (value === correctLogin) {
+                    typeText('> Login accepted. Enter password: ', () => {
+                        stage = 1;
+                        showInput('');
+                    });
+                } else {
+                    typeText('<span class="error">ERROR: Invalid Login</span><br>', () => {
+                        typeText('> System lockdown initiated. Retry in 60s<br>');
+                        setTimeout(() => {
+                            output.innerHTML = '> Booting SECURE SYSTEM v7.9.1...<br>';
+                            stage = 0;
+                            startSequence();
+                        }, 3000);
+                    });
+                }
+            } else if (stage === 1) {
+                if (value === correctPassword) {
+                    typeText('> Password accepted. Loading database menu...<br>', () => {
+                        stage = 2;
+                        setTimeout(showMenu, 1000);
+                    });
+                } else {
+                    typeText('<span class="error">ERROR: Invalid Password</span><br>', () => {
+                        typeText('> WARNING: Intrusion attempt logged.<br>');
+                        typeText('> System lockdown initiated. Retry in 60s<br>');
+                        setTimeout(() => {
+                            output.innerHTML = '> Booting SECURE SYSTEM v7.9.1...<br>';
+                            stage = 0;
+                            startSequence();
+                        }, 3000);
+                    });
+                }
+            }
+        }
+
+        function showMenu() {
+            typeText('> DATABASE MANAGEMENT MENU<br>');
+            typeText('> 1. View Logs<br>');
+            typeText('> 2. Edit Records<br>');
+            typeText('> 3. Exit<br>');
+            setTimeout(crashSystem, 3000);
+        }
+
+        function crashSystem() {
+            typeText('<span class="error">CRASH DETECTED: System Failure</span><br>');
+            typeText('> Password updated to: 499,&:@29030:@;&20202@;&2920-@₽,8:3<br>');
+            typeText('> System reboot required...<br>');
+            setTimeout(() => {
+                output.innerHTML = '> Booting SECURE SYSTEM v7.9.1...<br>';
+                stage = 0;
+                startSequence();
+            }, 3000);
+        }
+
+        function startSequence() {
+            setTimeout(() => {
+                typeText('> FIREWALL DETECTED: Level 5 Quantum Encryption<br>');
+                setTimeout(() => {
+                    typeText('> Attempting bypass...<br>');
+                    setTimeout(() => {
+                        typeText('> Enter access code: ', () => showInput(''));
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }
+
+        // Запуск
+        startSequence();
+    </script>
+</body>
+</html>
